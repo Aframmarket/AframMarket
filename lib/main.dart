@@ -1,125 +1,232 @@
+import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/otpScreen.dart';
+import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  //shared preference instance
+  final prefs = await SharedPreferences.getInstance();
+  final showHome = prefs.getBool('showHome') ?? false;
+  runApp(MyApp(
+      showHome: showHome
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.showHome});
+
+  final bool showHome;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        debugShowCheckedModeBanner: false,
+        title: 'AframMarket',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        //to navigate after onboarding
+        initialRoute: showHome ? '/logInScreen' : '/',
+        routes: {
+          '/': (context) => const OnboardingScreen(),
+          '/home': (context) => const Home(),
+          '/logInScreen': (context) => const AuthLoginScreen(),
+          '/signUpScreen': (context) => AuthSignUpScreen(),
+          '/otpScreen': (context) => const OtpVerificationScreen(),
+          '/gpsScreen': (context) => const AccessLocationScreen()
+        });
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      body: Container(
+        height: screenHeight,
+        width: screenWidth,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/splash.png"), fit: BoxFit.cover)
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.yellow,
+      body: Text("data"),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class NotificationScreen extends StatelessWidget {
+  const NotificationScreen({super.key});
 
-  void _incrementCounter() {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class DetailsScreen extends StatelessWidget {
+  const DetailsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Delivery extends StatelessWidget {
+  const Delivery({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Profile extends StatelessWidget {
+  const Profile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    ProfileScreen(),
+    NotificationScreen(),
+    DetailsScreen(),
+    Delivery(),
+    Profile()
+  ];
+
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return SafeArea(
+      child: Scaffold(
+        extendBody: true,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: Center(
+            child: Text(
+              "Home screen"
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
+        bottomNavigationBar: Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: AppColors.primaryGreenColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0), // Adjust the radius as needed
+              topRight: Radius.circular(20.0), // Adjust the radius as needed
             ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                spreadRadius: 0,
+                blurRadius: 10,
+                offset: const Offset(0, -2), // Move shadow upwards
+              ),
+            ]
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                // sets the background color of the `BottomNavigationBar`
+                  canvasColor: AppColors.primaryGreenColor,
+                  textTheme: Theme
+                      .of(context)
+                      .textTheme
+                      .copyWith(bodySmall: TextStyle(color: Colors.yellow)
+                  )
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: AppColors.primaryGreenColor,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                items: <BottomNavigationBarItem>[
+                  const BottomNavigationBarItem(
+                    activeIcon: ImageIcon(AssetImage("assets/active_home.png"), color: AppColors.primaryYellowColor, size: 24,),
+                    icon: ImageIcon(AssetImage("assets/active_home.png"), color: AppColors.iconGrey, size: 24,),
+                    label: 'Home',
+                  ),
+                  const BottomNavigationBarItem(
+                    activeIcon: ImageIcon(AssetImage("assets/delivery.png"), color: AppColors.primaryYellowColor, size: 24,),
+                    icon: ImageIcon(AssetImage("assets/delivery.png"), color: AppColors.iconGrey, size: 24,),
+                    label: 'Delivery',
+                  ),
+                  BottomNavigationBarItem(
+                    activeIcon: Image.asset("assets/qrIcon.png", width: 54, height: 54,),
+                    icon: Image.asset("assets/qrIcon.png", width: 54, height: 54,),
+                    label: 'Scan',
+                  ),
+                  const BottomNavigationBarItem(
+                    activeIcon: ImageIcon(AssetImage("assets/notification.png"), color: AppColors.primaryYellowColor, size: 24,),
+                    icon: ImageIcon(AssetImage("assets/notification.png"), color: AppColors.iconGrey, size: 24,),
+                    label: 'Notification',
+                  ),
+                  const BottomNavigationBarItem(
+                    activeIcon: ImageIcon(AssetImage("assets/profile.png"), color: AppColors.primaryYellowColor, size: 24,),
+                    icon: ImageIcon(AssetImage("assets/profile.png"), color: AppColors.iconGrey, size: 24,),
+                    label: 'Profile',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.blue,
+                onTap: _onItemTapped,
+              ),
+            ),
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
