@@ -50,7 +50,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                 Text(
                   "Aframmarket will only access your location while using the app",
                   style: GoogleFonts.sen(
-                  color: Colors.black,
+                  color: AppColors.lightTxt2,
                   textStyle: Theme.of(context)
                       .textTheme
                       .displayLarge,

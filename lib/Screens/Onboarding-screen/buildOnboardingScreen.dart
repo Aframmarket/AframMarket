@@ -1,3 +1,4 @@
+import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,39 +29,39 @@ class BuildOnboardingScreen extends StatelessWidget {
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15,
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Image(image: AssetImage(imageUrl)),
+                    SizedBox(
+                      height: 29,
+                    ),
+                    Text(
+                      heading,
+                      style: GoogleFonts.sen(
+                        color: AppColors.darkTxt4,
+                        textStyle: Theme.of(context).textTheme.displayLarge,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
                       ),
-                      Image(image: AssetImage(imageUrl)),
-                      SizedBox(
-                        height: 29,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      subHeading,
+                      style: GoogleFonts.sen(
+                        color: AppColors.lightTxt2,
+                        textStyle: Theme.of(context).textTheme.displayLarge,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
                       ),
-                      Text(
-                        heading,
-                        style: GoogleFonts.sen(
-                          textStyle: Theme.of(context).textTheme.displayLarge,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        subHeading,
-                        style: GoogleFonts.sen(
-                          textStyle: Theme.of(context).textTheme.displayLarge,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ],
             ),

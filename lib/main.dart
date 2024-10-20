@@ -2,6 +2,9 @@ import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/otpScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
@@ -66,27 +69,6 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Text("data"),
-    );
-  }
-}
-
-class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
 
@@ -98,15 +80,6 @@ class DetailsScreen extends StatelessWidget {
 
 class Delivery extends StatelessWidget {
   const Delivery({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class Profile extends StatelessWidget {
-  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +99,11 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    ProfileScreen(),
-    NotificationScreen(),
-    DetailsScreen(),
+    HomeScreen(),
     Delivery(),
-    Profile()
+    DetailsScreen(),
+    NotificationScreen(),
+    ProfileScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -144,20 +117,12 @@ class _HomeState extends State<Home> {
     return SafeArea(
       child: Scaffold(
         extendBody: true,
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Center(
-            child: Text(
-              "Home screen"
-            ),
-          ),
-        ),
         body: IndexedStack(
           index: _selectedIndex,
           children: _widgetOptions,
         ),
         bottomNavigationBar: Container(
-          height: 100,
+          height: 90,
           decoration: BoxDecoration(
             color: AppColors.primaryGreenColor,
             borderRadius: const BorderRadius.only(

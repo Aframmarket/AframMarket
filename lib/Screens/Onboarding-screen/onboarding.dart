@@ -1,4 +1,5 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:afram_project/Screens/Onboarding-screen/buildOnboardingScreen.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     //straight navigation
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('showHome', true);
-    Navigator.of(context).pushNamed("/login");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AuthLoginScreen()),
+    );
   }
 
 
