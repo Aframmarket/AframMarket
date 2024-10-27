@@ -1,14 +1,18 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
-import 'package:afram_project/Screens/Driver-Ui/authScreens/otpScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Screens/Driver-Ui/provider/driver_signup_provider.dart';
+import 'Screens/Driver-Ui/provider/signup_provider.dart';
+import 'Screens/Driver-Ui/provider/verification_provider.dart';
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,23 +32,38 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'AframMarket',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SignUpProvider>(
+          create: (_) => SignUpProvider(),
         ),
-        //to navigate after onboarding
-        initialRoute: showHome ? '/logInScreen' : '/',
-        routes: {
-          '/': (context) => const OnboardingScreen(),
-          '/home': (context) => const Home(),
-          '/logInScreen': (context) => const AuthLoginScreen(),
-          '/signUpScreen': (context) => AuthSignUpScreen(),
-          '/otpScreen': (context) => const OtpVerificationScreen(),
-          '/gpsScreen': (context) => const AccessLocationScreen()
-        });
+        ChangeNotifierProvider<DriverSignUpProvider>(
+          create: (_) => DriverSignUpProvider(),
+        ),
+        ChangeNotifierProvider<VerificationProvider>(
+          create: (_) => VerificationProvider(),
+        ),
+        ChangeNotifierProvider<LoginProvider>(
+          create: (_) => LoginProvider(),
+        ),
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'AframMarket',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          //to navigate after onboarding
+          initialRoute: showHome ? '/logInScreen' : '/',
+          routes: {
+            '/': (context) => const OnboardingScreen(),  //no forget to put the onboarding screen here when  you're done
+            '/home': (context) => const Home(),
+            '/logInScreen': (context) => const AuthLoginScreen(),
+            '/signUpScreen': (context) => AuthSignUpScreen(),
+            '/gpsScreen': (context) => const AccessLocationScreen()
+          }),
+    );
   }
 }
 

@@ -1,9 +1,12 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:afram_project/Screens/Driver-Ui/sideScreens/recentDelivery.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/deliveryCards.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/login_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -607,6 +610,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
+    final loginProvider = Provider.of<LoginProvider>(context);
+
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWeight = MediaQuery.of(context).size.width;
 
@@ -621,6 +626,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await loginProvider.logout(); // Call logout
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => AuthLoginScreen()),
+                        ); // Navigate back to login screen
+                      },
+                      child: Text('Logout'),
+                    ),
                     SizedBox(
                       child: Row(
                         children: [
