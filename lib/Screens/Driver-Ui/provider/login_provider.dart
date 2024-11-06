@@ -27,7 +27,7 @@ class LoginProvider with ChangeNotifier {
         body: json.encode({'email': email, 'password': password}),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         String? token = responseData['token']; // Use String? to handle possible null
 
@@ -44,7 +44,7 @@ class LoginProvider with ChangeNotifier {
         return true; // Indicate success
       } else {
         final responseData = json.decode(response.body);
-        _errorMessage = responseData['error'] ?? 'Failed to login. Please try again.';
+        _errorMessage = responseData['error'] ?? 'Incorrect email or password.';
         _isLoading = false;
         notifyListeners();
         return false;

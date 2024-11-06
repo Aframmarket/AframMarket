@@ -1,6 +1,8 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp1.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/deliveryMaps.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
             '/': (context) => const OnboardingScreen(),  //no forget to put the onboarding screen here when  you're done
             '/home': (context) => const Home(),
             '/logInScreen': (context) => const AuthLoginScreen(),
-            '/signUpScreen': (context) => AuthSignUpScreen(),
+            '/signUpScreen': (context) => AuthSignUp1(),
             '/gpsScreen': (context) => const AccessLocationScreen()
           }),
     );
@@ -97,15 +99,6 @@ class DetailsScreen extends StatelessWidget {
   }
 }
 
-class Delivery extends StatelessWidget {
-  const Delivery({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -119,7 +112,7 @@ class _HomeState extends State<Home> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Delivery(),
+    DeliveryMapsScreen(),
     DetailsScreen(),
     NotificationScreen(),
     ProfileScreen()
@@ -173,6 +166,7 @@ class _HomeState extends State<Home> {
                   )
               ),
               child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
                 backgroundColor: AppColors.primaryGreenColor,
                 showSelectedLabels: false,
                 showUnselectedLabels: false,

@@ -53,7 +53,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             filled: true,
             fillColor: AppColors.softWhite,
             contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-            hintStyle: TextStyle(color: Colors.grey[600], fontSize: 14.0),
+            hintStyle: TextStyle(
+                color: AppColors.hintTextColor,
+                fontSize: 14.0),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: AppColors.primaryGreenColor,

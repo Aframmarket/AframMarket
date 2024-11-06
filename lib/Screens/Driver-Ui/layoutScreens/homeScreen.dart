@@ -731,18 +731,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              UiText(
-                                  text: "07",
-                                  textColor: AppColors.primaryGreenColor,
-                                  fontSize: 52.32,
-                                  fontWeight: FontWeight.w700
+                              Flexible(
+                                child: UiText(
+                                    text: "07",
+                                    textColor: AppColors.primaryGreenColor,
+                                    fontSize: 52.32,
+                                    fontWeight: FontWeight.w700
+                                ),
                               ),
-                              UiText(
-                                  text: "Pending delivery",
-                                  textColor: AppColors.softText,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400
+                              Flexible(
+                                child: UiText(
+                                    text: "Pending delivery",
+                                    textColor: AppColors.softText,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
                             ],
                           ),
@@ -764,18 +769,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              UiText(
-                                  text: "05",
-                                  textColor: AppColors.primaryGreenColor,
-                                  fontSize: 52.32,
-                                  fontWeight: FontWeight.w700
+                              Flexible(
+                                child: UiText(
+                                    text: "05",
+                                    textColor: AppColors.primaryGreenColor,
+                                    fontSize: 52.32,
+                                    fontWeight: FontWeight.w700
+                                ),
                               ),
-                              UiText(
-                                  text: "Scheduled Delivery",
-                                  textColor: AppColors.softText,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400
+                              Flexible(
+                                child: UiText(
+                                    text: "Scheduled Delivery",
+                                    textColor: AppColors.softText,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
                             ],
                           ),

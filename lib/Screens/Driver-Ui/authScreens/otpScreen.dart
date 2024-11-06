@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import '../../Colors/colors.dart';
 import '../Models/verificationModel.dart';
 import '../provider/verification_provider.dart';
 import 'locationScreen.dart';
+import 'package:http/http.dart' as http;
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
@@ -68,11 +71,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     // Implement verification logic here
   }
 
-  //
-  void _resendCode() {
-    // Implement resend verification code logic here
-    print('Resending code to ${widget.email}');
-    _startResendTimer();
+  Future<void> resendOtp() async {
+
+    // Send API request to resend OTP
+    final response = await http.post(
+      Uri.parse('https://aframmarket.com/sandbox/api/account/resend-code'),
+      headers: {
+        'API-Key': 'aCvdsQwr4QgddXoiPJB9BeA8YmPva5sZm2',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode({'email': widget.email}),
+    );
+
+    if (response.statusCode == 200) {
+      // Assuming the API returns a success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('OTP code has been resent to your email')),
+      );
+      _startResendTimer();
+    } else {
+      // Show error message from the API response
+      final responseBody = jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(responseBody['error'] ?? 'Failed to resend OTP')),
+      );
+    }
   }
 
   @override
@@ -84,7 +107,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
+  // void buttFuc(){
+  //   final String code = _controllers.map((controller) => controller.text).join('');
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => AuthSignUpScreen(userId: code, email: widget.email,)),
+  //   );
+  // }
+
   void _submit() async {
+    final String code = _controllers.map((controller) => controller.text).join('');
+
     if (_formKey.currentState!.validate()) {
       Verification verification = Verification(
         email: widget.email,
@@ -105,7 +138,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         // Navigate to the main application screen
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AccessLocationScreen()),
+          MaterialPageRoute(builder: (context) => AuthSignUpScreen(userId: code, email: widget.email,)),
         );
       } else {
         String? error =
@@ -185,7 +218,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "example@gmail.com",
+                    widget.email,
                     style: GoogleFonts.sen(
                       color: Colors.white,
                       textStyle: Theme.of(context).textTheme.displayLarge,
@@ -268,7 +301,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   alignment: Alignment.centerRight,
                                   child: _isResendEnabled
                                       ? TextButton(
-                                          onPressed: _resendCode,
+                                          onPressed: resendOtp,
                                           child: UiText(
                                               text: "Resend",
                                               textColor: Colors.black,
@@ -284,7 +317,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                     btnText: "Verify",
                                     btnColor: AppColors.primaryYellowColor,
                                     onTap: _submit,
-                                    btnTextColor: Colors.white)
+                                    btnTextColor: Colors.white
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                // ElevatedButton(
+                                //     onPressed: buttFuc, child: Text("Next screen"))
                               ],
                             ),
                           ),

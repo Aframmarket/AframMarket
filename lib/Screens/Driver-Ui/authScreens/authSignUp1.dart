@@ -1,59 +1,53 @@
+import 'dart:convert';
 import 'package:afram_project/Screens/Driver-Ui/Models/driverUserModel.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/otpScreen.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
+import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:afram_project/Screens/Reusables/customTextField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../Colors/colors.dart';
+import '../../Reusables/CustomDropDown.dart';
 import '../../Reusables/largeButton.dart';
 import '../provider/driver_signup_provider.dart';
 import '../provider/verification_provider.dart';
 
-class AuthSignUp2 extends StatefulWidget {
-  final String? email;
-  final String? firstname;
-  final String? lastname;
-
-  const AuthSignUp2({super.key, this.email, this.firstname, this.lastname});
+class AuthSignUp1 extends StatefulWidget {
+  const AuthSignUp1({super.key,});
 
   @override
-  State<AuthSignUp2> createState() => _AuthSignUp2State();
+  State<AuthSignUp1> createState() => _AuthSignUp1State();
 }
 
-class _AuthSignUp2State extends State<AuthSignUp2> {
+class _AuthSignUp1State extends State<AuthSignUp1> {
   final _formKey = GlobalKey<FormState>();
+  List<dynamic> states = [];
 
   //show password
   bool showPassword = false;
 
   // Controllers for form fields
-  late TextEditingController _firstNameController;
-  late TextEditingController _lastNameController;
-  late TextEditingController _emailController;
-
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _repeatPasswordController =
-      TextEditingController();
+  final TextEditingController _repeatPasswordController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize email controller with the passed email
-    _emailController = TextEditingController(text: widget.email);
-    _firstNameController = TextEditingController(text: widget.firstname);
-    _lastNameController = TextEditingController(text: widget.lastname);
+    loadJsonData();
   }
 
   @override
   void dispose() {
     // Dispose controllers when not needed
-    _firstNameController.dispose();
-    _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _repeatPasswordController.dispose();
+    _stateController.dispose();
     super.dispose();
   }
 
@@ -64,6 +58,17 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
     });
   }
 
+  Future<void> loadJsonData() async {
+    // Load the JSON data from the file
+    final String response = await rootBundle.loadString('assets/JSON/statesAndCities.json');
+    final data = jsonDecode(response);
+
+    setState(() {
+      states = data['states'];
+    });
+  }
+
+
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       // Create a DriverSignUpUser object
@@ -71,7 +76,7 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
         repeatPassword: _repeatPasswordController.text.trim(),
-        // state is defaulted to 20
+        state: _stateController.text.trim(),
       );
 
       // Call the signUp method from the provider
@@ -193,7 +198,7 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                         color: Colors.white,
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.only(top: 8),
                         child: SingleChildScrollView(
                           child: Column(children: [
                             Column(
@@ -209,32 +214,14 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      CustomTextField(
-                                        controllerText: _firstNameController,
-                                        hintText: "John",
-                                        validationMessage: "",
-                                        fieldName: "First Name",
-                                        showIcon: false,
-                                        readOnly: true,
-                                      ),
-                                      CustomTextField(
-                                        controllerText: _lastNameController,
-                                        hintText: "Doe",
-                                        validationMessage: "",
-                                        fieldName: "Last Name",
-                                        showIcon: false,
-                                        readOnly: true,
-                                      ),
-                                      CustomTextField(
-                                        controllerText: _emailController,
-                                        hintText: "example@gmail.com",
-                                        validationMessage: "",
-                                        fieldName: "Email Address",
-                                        showIcon: false,
-                                        readOnly: true,
+                                      CustomEmailField(
+                                          controllerText: _emailController,
+                                          hintText: "example@gmail.com",
+                                          validationMessage: "Email field cannot be empty",
+                                          fieldName: "Email Address"
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(15.0),
+                                        padding: const EdgeInsets.all(10.0),
                                         child: Column(
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -314,7 +301,7 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                                                 fillColor: AppColors.softWhite,
                                                 contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 15),
                                                 hintStyle: TextStyle(
                                                     color: AppColors.softIconColor,
@@ -325,7 +312,7 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(15.0),
+                                        padding: const EdgeInsets.all(10.0),
                                         child: Column(
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -413,7 +400,32 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                                                     fontSize: 14.0),
                                               ),
                                             ),
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "State",
+                                              style: GoogleFonts.sen(
+                                                color: Colors.black,
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .displayLarge,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            CustomDropdownField(
+                                              hintText: 'Select State',
+                                              items: states.map((state) => state['name'] as String).toList(),
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  _stateController.text = newValue;
+                                                });
+                                              },
+                                              controller: _stateController,
+                                            ),
+                                            SizedBox(height: 20),
                                             UiText(
                                                 text:
                                                 "The password should be at least 11 characters long with lower case, upper case and numbers",
@@ -449,7 +461,7 @@ class _AuthSignUp2State extends State<AuthSignUp2> {
                                 //     onPressed: (){
                                 //       Navigator.push(
                                 //         context,
-                                //         MaterialPageRoute(builder: (context) => const OtpVerificationScreen(email: "amrohore4real@gmail.com")),
+                                //         MaterialPageRoute(builder: (context) => OtpVerificationScreen(email: _emailController.text.trim())),
                                 //       );
                                 //     },
                                 //     child: Text("Otp screen")),

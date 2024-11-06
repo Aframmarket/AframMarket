@@ -31,17 +31,17 @@ class DriverSignUpProvider with ChangeNotifier {
         body: json.encode(user.toJson()),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Assuming the API sends a success message and possibly other data
+      if (response.statusCode == 200) {
+        // success message and possibly other data
         final responseData = json.decode(response.body);
         _successMessage = responseData['message'] ?? 'Sign up successful! A code has been sent to your email.';
         _isLoading = false;
         notifyListeners();
         return true;
       } else {
-        // Parse the error message from the response if available
+        // error message from the response if available
         final responseData = json.decode(response.body);
-        _errorMessage = responseData['error'] ?? 'Failed to sign up. Please try again.';
+        _errorMessage = responseData['error'] ?? 'Email address may already be used.';
         print(_errorMessage);
         _isLoading = false;
         notifyListeners();

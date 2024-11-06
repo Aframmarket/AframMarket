@@ -28,7 +28,7 @@ class SignUpProvider with ChangeNotifier {
         body: json.encode(user.toJson()),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         // Assuming the API returns a success message
         _isLoading = false;
         notifyListeners();

@@ -1,5 +1,5 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
-import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp2.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp1.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/forgotPassword.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
@@ -67,7 +67,8 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
 
-      bool success = await Provider.of<LoginProvider>(context, listen: false).login(email, password);
+      bool success = await Provider.of<LoginProvider>(context, listen: false)
+          .login(email, password);
 
       if (success) {
         // Save credentials if "Remember Me" is checked
@@ -82,8 +83,10 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
           MaterialPageRoute(builder: (_) => Home()),
         );
       } else {
-        String? error = Provider.of<LoginProvider>(context, listen: false).errorMessage;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error ?? 'Login failed')));
+        String? error =
+            Provider.of<LoginProvider>(context, listen: false).errorMessage;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error ?? 'Login failed')));
       }
     }
   }
@@ -111,10 +114,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
       backgroundColor: AppColors.primaryGreenColor,
       body: loginProvider.isLoading
           ? Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryYellowColor)
-            )
-      )
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryYellowColor)))
           : SizedBox(
               width: screenWeight,
               child: Column(
@@ -216,27 +218,34 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                   AppColors.primaryGreenColor,
                                               style: TextStyle(fontSize: 16.0),
                                               decoration: InputDecoration(
-                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: AppColors
-                                                          .primaryGreenColor,
-                                                      style: BorderStyle.solid,
-                                                      width: 1.5,
-                                                    ),
+                                                border: OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: AppColors
-                                                          .primaryGreenColor,
-                                                      style: BorderStyle.solid,
-                                                      width: 1.5,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: AppColors
+                                                              .primaryGreenColor,
+                                                          style:
+                                                              BorderStyle.solid,
+                                                          width: 1.5,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: AppColors
+                                                              .primaryGreenColor,
+                                                          style:
+                                                              BorderStyle.solid,
+                                                          width: 1.5,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
                                                 hintText: "***************",
                                                 filled: true,
                                                 fillColor: AppColors.softWhite,
@@ -268,13 +277,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Checkbox(
                                                       value: _rememberMe,
-                                                      activeColor: AppColors.primaryYellowColor,
+                                                      activeColor: AppColors
+                                                          .primaryYellowColor,
                                                       onChanged: (bool? value) {
                                                         setState(() {
                                                           _rememberMe = value!;
@@ -313,11 +324,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     style: GoogleFonts.sen(
                                                       color: AppColors
                                                           .primaryYellowColor,
-                                                      textStyle: Theme.of(context)
-                                                          .textTheme
-                                                          .displayLarge,
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .displayLarge,
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                 )
@@ -328,8 +341,8 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                             ),
                                             LargeBtn(
                                                 btnText: "Log In",
-                                                btnColor:
-                                                    AppColors.primaryYellowColor,
+                                                btnColor: AppColors
+                                                    .primaryYellowColor,
                                                 onTap: _submit,
                                                 btnTextColor: Colors.white),
                                             SizedBox(
@@ -366,11 +379,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     style: GoogleFonts.sen(
                                                       color: AppColors
                                                           .primaryYellowColor,
-                                                      textStyle: Theme.of(context)
-                                                          .textTheme
-                                                          .displayLarge,
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .displayLarge,
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                 )
@@ -413,7 +428,8 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                         decoration: BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(50),
+                                                                    .circular(
+                                                                        50),
                                                             color: AppColors
                                                                 .softWhite),
                                                         child: Image(
@@ -430,13 +446,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                         decoration: BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(50),
-                                                            color: Colors.black),
+                                                                    .circular(
+                                                                        50),
+                                                            color:
+                                                                Colors.black),
                                                         child: Image(
                                                             image: AssetImage(
-                                                                "assets/appleIcon.png")
-                                                        )
-                                                    )
+                                                                "assets/appleIcon.png")))
                                                   ],
                                                 )
                                               ],

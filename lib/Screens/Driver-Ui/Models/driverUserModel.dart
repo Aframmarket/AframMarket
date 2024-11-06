@@ -1,15 +1,14 @@
-
 class DriverSignUpModel{
   final String email;
   final String password;
   final String repeatPassword;
-  final int state;
+  final String state;
 
   DriverSignUpModel({
     required this.email,
     required this.password,
     required this.repeatPassword,
-    this.state = 20, // Default value as specified
+    required this.state // Default value as specified
   });
 
   // Convert DriverSignUpUser object to JSON
