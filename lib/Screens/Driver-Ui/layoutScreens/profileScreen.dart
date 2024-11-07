@@ -1,4 +1,5 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/helpCenter.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/profileCards.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +55,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 15,
                             ),
-                            UiProfileCard(
-                                cardTitle: "Help Centre",
-                                iconImage: AssetImage("assets/questionMark.png"),
-                                onPressed: (){}, arrow: true,
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => HelpCenterScreen()),
+                                );
+                              },
+                              child: UiProfileCard(
+                                  cardTitle: "Help Centre",
+                                  iconImage: AssetImage("assets/questionMark.png"),
+                                  onPressed: (){}, arrow: true,
+                              ),
                             )
                           ],
                         ),
