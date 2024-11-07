@@ -107,13 +107,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
-  // void buttFuc(){
-  //   final String code = _controllers.map((controller) => controller.text).join('');
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => AuthSignUpScreen(userId: code, email: widget.email,)),
-  //   );
-  // }
+  void buttFuc(){
+    final String code = _controllers.map((controller) => controller.text).join('');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AuthSignUpScreen(userId: code, email: widget.email,)),
+    );
+  }
 
   void _submit() async {
     final String code = _controllers.map((controller) => controller.text).join('');
@@ -322,8 +322,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                // ElevatedButton(
-                                //     onPressed: buttFuc, child: Text("Next screen"))
+                                ElevatedButton(
+                                    onPressed: buttFuc, child: Text("Next screen"))
                               ],
                             ),
                           ),

@@ -4,8 +4,8 @@ import '../Colors/colors.dart';
 
 class CustomDropdownField extends StatefulWidget {
   final String hintText;
-  final List<String> items;
-  final Function(String) onChanged;
+  final List<Map<String, dynamic>>? items;
+  final void Function(String) onChanged;
   final TextEditingController controller;
 
   const CustomDropdownField({
@@ -33,15 +33,17 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
-              itemCount: widget.items.length,
+              itemCount: widget.items?.length,
               itemBuilder: (context, index) {
+                final item = widget.items?[index];
                 return ListTile(
-                  title: Text(widget.items[index]),
+                  title: Text(item?['name']),
                   onTap: () {
                     setState(() {
-                      selectedValue = widget.items[index];
-                      widget.controller.text = selectedValue!; // Update the controller text
-                      widget.onChanged(selectedValue!);
+                      selectedValue = item?['name']; // Show the selected name
+                      widget.controller.text = item?['id']!; // Set the controller text to the id
+                      widget.onChanged(item?['name']!); // Pass the id to the onChanged callback
+                      print(item?["id"]);
                     });
                     Navigator.of(context).pop(); // Close the dialog
                   },

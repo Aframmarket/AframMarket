@@ -6,6 +6,7 @@ import 'package:afram_project/Screens/Driver-Ui/layoutScreens/deliveryMaps.dart'
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/qrCodeScanner.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
@@ -90,15 +91,6 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -113,7 +105,7 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     DeliveryMapsScreen(),
-    DetailsScreen(),
+    QrCodeScanner(),
     NotificationScreen(),
     ProfileScreen()
   ];

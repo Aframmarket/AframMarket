@@ -14,6 +14,7 @@ import '../../Reusables/CustomDropDown.dart';
 import '../../Reusables/largeButton.dart';
 import '../provider/driver_signup_provider.dart';
 import '../provider/verification_provider.dart';
+import 'package:http/http.dart' as http;
 
 class AuthSignUp1 extends StatefulWidget {
   const AuthSignUp1({super.key,});
@@ -24,7 +25,8 @@ class AuthSignUp1 extends StatefulWidget {
 
 class _AuthSignUp1State extends State<AuthSignUp1> {
   final _formKey = GlobalKey<FormState>();
-  List<dynamic> states = [];
+  late String selectedStateId;
+  List<Map<String, dynamic>> states = [];
 
   //show password
   bool showPassword = false;
@@ -38,7 +40,7 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
   @override
   void initState() {
     super.initState();
-    loadJsonData();
+    fetchStates();
   }
 
   @override
@@ -58,14 +60,37 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
     });
   }
 
-  Future<void> loadJsonData() async {
-    // Load the JSON data from the file
-    final String response = await rootBundle.loadString('assets/JSON/statesAndCities.json');
-    final data = jsonDecode(response);
+  Future<void> fetchStates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://aframmarket.com/sandbox/api/utils/driver-states'),
+        headers: {
+          'API-Key': 'aCvdsQwr4QgddXoiPJB9BeA8YmPva5sZm2',
+          'Content-Type': 'application/json',
+        },
+      );
 
-    setState(() {
-      states = data['states'];
-    });
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<Map<String, dynamic>> fetchedStates = (data['states'] as List).map((state) {
+          return {
+            'id': state['id'],
+            'name': state['name'],
+          };
+        }).toList();
+
+        setState(() {
+          states = fetchedStates;
+        });
+      } else {
+        throw Exception('Failed to load states: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      // Show a SnackBar with the error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
   }
 
 
@@ -76,7 +101,7 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
         repeatPassword: _repeatPasswordController.text.trim(),
-        state: _stateController.text.trim(),
+        state: selectedStateId,
       );
 
       // Call the signUp method from the provider
@@ -417,7 +442,10 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                             ),
                                             CustomDropdownField(
                                               hintText: 'Select State',
-                                              items: states.map((state) => state['name'] as String).toList(),
+                                              items: states.map((state) => {
+                                                'name': state['name'] as String,
+                                                'id': state['id'] as String,
+                                              }).toList(),
                                               onChanged: (newValue) {
                                                 setState(() {
                                                   _stateController.text = newValue;
@@ -426,6 +454,26 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                               controller: _stateController,
                                             ),
                                             SizedBox(height: 20),
+                                            // DropdownButton<String>(
+                                            //   hint: Text("Select a State"),
+                                            //   padding: EdgeInsets.all(8),
+                                            //   dropdownColor: Colors.white,
+                                            //   underline: SizedBox(),
+                                            //   isExpanded: true,
+                                            //   value: selectedStateId,
+                                            //   onChanged: (String? newValue) {
+                                            //     setState(() {
+                                            //       selectedStateId = newValue!;
+                                            //     });
+                                            //     print("Selected State ID: $selectedStateId"); // This gives you the ID of the selected state
+                                            //   },
+                                            //   items: states.map((state) {
+                                            //     return DropdownMenuItem<String>(
+                                            //       value: state['id'], // Set the ID as the value
+                                            //       child: Text(state['name']!), // Display the state name
+                                            //     );
+                                            //   }).toList(),
+                                            // ),
                                             UiText(
                                                 text:
                                                 "The password should be at least 11 characters long with lower case, upper case and numbers",
@@ -457,14 +505,14 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                     ],
                                   ),
                                 ),
-                                // ElevatedButton(
-                                //     onPressed: (){
-                                //       Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(builder: (context) => OtpVerificationScreen(email: _emailController.text.trim())),
-                                //       );
-                                //     },
-                                //     child: Text("Otp screen")),
+                                ElevatedButton(
+                                    onPressed: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => OtpVerificationScreen(email: _emailController.text.trim())),
+                                      );
+                                    },
+                                    child: Text("Otp screen")),
                                 SizedBox(
                                   height: 20,
                                 ),

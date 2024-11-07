@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp1.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import '../../Reusables/customTextField.dart';
 import '../../Reusables/largeButton.dart';
 import '../Models/driverModel.dart';
 import '../provider/signup_provider.dart';
+import 'package:http/http.dart' as http;
 
 class AuthSignUpScreen extends StatefulWidget {
   final String userId;
@@ -27,7 +27,7 @@ class AuthSignUpScreen extends StatefulWidget {
 class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   List<dynamic> states = [];
-  List<String> cities = [];
+  List<Map<String, dynamic>> cities = [];
 
   // Controllers for form fields
   final TextEditingController _firstNameController = TextEditingController();
@@ -46,30 +46,43 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
   @override
   void initState() {
     super.initState();
-    loadJsonData();
+    fetchStates();
     _userIdController = TextEditingController(text: widget.userId);
     _emailController = TextEditingController(text: widget.email);
   }
 
-  Future<void> loadJsonData() async {
-    // Load the JSON data from the file
-    final String response =
-        await rootBundle.loadString('assets/JSON/statesAndCities.json');
-    final data = jsonDecode(response);
+  Future<void> fetchStates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://aframmarket.com/sandbox/api/utils/driver-states'),
+        headers: {
+          'API-Key': 'aCvdsQwr4QgddXoiPJB9BeA8YmPva5sZm2',
+          'Content-Type': 'application/json',
+        },
+      );
 
-    setState(() {
-      states = data['states'];
-    });
-  }
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<Map<String, dynamic>> fetchedStates =
+            (data['states'] as List).map((state) {
+          return {
+            'id': state['id'],
+            'name': state['name'],
+          };
+        }).toList();
 
-  void fetchCities(String stateName) {
-    setState(() {
-      cities = states
-          .firstWhere((state) => state['name'] == stateName)['cities']
-          .cast<String>();
-      _cityController
-          .clear(); // Clear the city controller when changing the state
-    });
+        setState(() {
+          states = fetchedStates;
+        });
+      } else {
+        throw Exception('Failed to load states: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      // Show a SnackBar with the error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
   }
 
   void _submit() async {
@@ -99,7 +112,10 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
           SnackBar(content: Text('Sign up successful!')),
         );
         //navigate to auth2 with the details needed
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => AccessLocationScreen()));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => AccessLocationScreen()));
       } else {
         // Show error message
         String? error =
@@ -141,7 +157,10 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryGreenColor,
       body: signUpProvider.isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryYellowColor)))
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -217,6 +236,15 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                     readOnly: false,
                                   ),
                                   CustomTextField(
+                                    controllerText: _userIdController,
+                                    hintText: "UserId",
+                                    validationMessage:
+                                        "User id cannot be empty",
+                                    fieldName: "User Id",
+                                    showIcon: false,
+                                    readOnly: true,
+                                  ),
+                                  CustomTextField(
                                     controllerText: _businessNameController,
                                     hintText: 'Business name',
                                     validationMessage:
@@ -234,10 +262,26 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                     showIcon: false,
                                     readOnly: false,
                                   ),
+                                  CustomEmailField(
+                                      controllerText: _emailController,
+                                      hintText: "Email Address",
+                                      validationMessage:
+                                          "Enter a valid email address",
+                                      fieldName: "Email Address"),
+                                  CustomTextField(
+                                    controllerText: _phoneController,
+                                    hintText: "Phone number",
+                                    validationMessage:
+                                        "Phone number cannot be empty",
+                                    fieldName: "Phone Number",
+                                    showIcon: false,
+                                    readOnly: false,
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "State",
@@ -256,14 +300,15 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                         CustomDropdownField(
                                           hintText: 'Select State',
                                           items: states
-                                              .map((state) =>
-                                          state['name'] as String)
+                                              .map((state) => {
+                                                    'name':
+                                                        state['name'] as String,
+                                                    'id': state['id'] as String,
+                                                  })
                                               .toList(),
                                           onChanged: (newValue) {
                                             setState(() {
                                               _stateController.text = newValue;
-                                              fetchCities(
-                                                  newValue); // Fetch cities for the selected state
                                             });
                                           },
                                           controller: _stateController,
@@ -274,7 +319,8 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "City",
@@ -309,7 +355,7 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                     controllerText: _zipcodeController,
                                     hintText: 'Zipcode',
                                     validationMessage:
-                                    'Zipcode cannot be empty',
+                                        'Zipcode cannot be empty',
                                     fieldName: 'Zip code',
                                     showIcon: false,
                                     readOnly: false,
@@ -318,7 +364,8 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Vehicle",
@@ -336,24 +383,30 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: AppColors.softWhite,
+                                              color: AppColors.softWhite,
                                               border: Border.all(
-                                                color: AppColors.primaryGreenColor,
+                                                color:
+                                                    AppColors.primaryGreenColor,
                                                 style: BorderStyle.solid,
                                                 width: 1.5,
                                               ),
-                                              borderRadius: BorderRadius.circular(15)
-                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
                                           child: DropdownButton<String>(
                                             padding: EdgeInsets.all(8),
                                             dropdownColor: Colors.white,
                                             underline: SizedBox(),
-                                            hint: Text('Select vehicle type', style: GoogleFonts.sen(
-                                              color: AppColors.hintTextColor,
-                                              textStyle: Theme.of(context).textTheme.displayLarge,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),),
+                                            hint: Text(
+                                              'Select vehicle type',
+                                              style: GoogleFonts.sen(
+                                                color: AppColors.hintTextColor,
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .displayLarge,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
                                             isExpanded: true,
                                             value: selectedVehicle,
                                             onChanged: (String? newValue) {
@@ -361,41 +414,18 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                                 selectedVehicle = newValue;
                                               });
                                             },
-                                            items: vehicleTypes.map<DropdownMenuItem<String>>(
+                                            items: vehicleTypes
+                                                .map<DropdownMenuItem<String>>(
                                                     (String value) {
-                                                  return DropdownMenuItem<String>(
-                                                    value: value,
-                                                    child: Text(value),
-                                                  );
-                                                }).toList(),
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  CustomEmailField(
-                                      controllerText: _emailController,
-                                      hintText: "Email Address",
-                                      validationMessage:
-                                          "Enter a valid email address",
-                                      fieldName: "Email Address"),
-                                  CustomTextField(
-                                    controllerText: _phoneController,
-                                    hintText: "Phone number",
-                                    validationMessage:
-                                        "Phone number cannot be empty",
-                                    fieldName: "Phone Number",
-                                    showIcon: false,
-                                    readOnly: false,
-                                  ),
-                                  CustomTextField(
-                                    controllerText: _userIdController,
-                                    hintText: "UserId",
-                                    validationMessage:
-                                        "User id cannot be empty",
-                                    fieldName: "User Id",
-                                    showIcon: false,
-                                    readOnly: true,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),

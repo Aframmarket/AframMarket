@@ -4,7 +4,6 @@ import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
@@ -20,7 +19,7 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
 
   // obtaining the location controller
   final Location _locationController = Location();
-  LatLng? _currentP = null;
+  LatLng? _currentP;
   final  Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
 
   static const LatLng _sourcePosition = LatLng(6.2887293, 5.50514);
@@ -32,10 +31,12 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
   @override
   void initState() {
     super.initState();
-    getLocationUpdates().then((_) => {
-      getPolylinePoints().then((coordinates) => {
-        generatePolyLineFromPoints(coordinates),
-      }),
+    getLocationUpdates().then((_) {
+      if (_currentP != null) {
+        getPolylinePoints().then((coordinates) {
+          generatePolyLineFromPoints(coordinates);
+        });
+      }
     });
   }
 
@@ -43,8 +44,8 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
   // function to point the map to a specific location
   Future<void> _cameraToPosition(LatLng pos) async{
     final GoogleMapController controller = await _mapController.future;
-    
-    CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 15);
+
+    CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
     await controller.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 
@@ -68,7 +69,7 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
         return;
       }
     }
-    
+
     _locationController.onLocationChanged.listen((LocationData currentLocation){
       if(currentLocation.latitude != null && currentLocation.longitude != null){
         setState(() {
@@ -84,11 +85,16 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
     List<LatLng> polylinesCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(googleApiKey: GOOGLE_MAPS_API_KEY, request: PolylineRequest(
-        origin: PointLatLng(_currentP!.latitude, _currentP!.longitude), destination: PointLatLng(_destinationPosition.latitude, _destinationPosition.longitude), mode: TravelMode.driving)
+        origin: PointLatLng(_currentP!.latitude, _currentP!.longitude),
+        destination: PointLatLng(_destinationPosition.latitude, _destinationPosition.longitude),
+        mode: TravelMode.driving
+    )
     );
     if (result.points.isNotEmpty){
       result.points.forEach((PointLatLng point) {
-        polylinesCoordinates.add(LatLng(point.latitude, point.longitude));
+        polylinesCoordinates.add(
+            LatLng(point.latitude, point.longitude)
+        );
       });
     }
     else{
@@ -100,7 +106,8 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
 
   void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
     PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(polylineId: id, color: AppColors.primaryYellowColor, points: polylineCoordinates, width: 8);
+    Polyline polyline = Polyline(polylineId: id, color: AppColors.primaryYellowColor,
+        points: polylineCoordinates, width: 8, visible: true);
     setState(() {
       polylines[id] = polyline;
     });
@@ -118,6 +125,7 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
         onMapCreated: (GoogleMapController controller){
           _mapController.complete(controller);
           },
+        zoomGesturesEnabled: true,
         markers: {
           Marker(
               markerId: MarkerId("_currentLocation"),
