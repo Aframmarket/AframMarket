@@ -1,8 +1,14 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/helpCenter.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/personalInfo.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/withdraw.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/withdrawal.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/profileCards.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../authScreens/authLogIn.dart';
+import '../provider/login_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-
+    final loginProvider = Provider.of<LoginProvider>(context);
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWeight = MediaQuery.of(context).size.width;
@@ -50,23 +56,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             UiProfileCard(
                                 cardTitle: "Personal Info",
                                 iconImage: AssetImage("assets/profileIcon.png"),
-                                onPressed: (){}, arrow: true,
+                                onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => PersonalInfoScreen()),
+                                  );
+                                }, arrow: true,
                             ),
                             SizedBox(
                               height: 15,
                             ),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => HelpCenterScreen()),
-                                );
-                              },
-                              child: UiProfileCard(
-                                  cardTitle: "Help Centre",
-                                  iconImage: AssetImage("assets/questionMark.png"),
-                                  onPressed: (){}, arrow: true,
-                              ),
+                            UiProfileCard(
+                                cardTitle: "Help Centre",
+                                iconImage: AssetImage("assets/questionMark.png"),
+                                onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HelpCenterScreen()),
+                                  );
+                                },
+                              arrow: true,
                             )
                           ],
                         ),
@@ -85,7 +94,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             UiProfileCard(
                                 cardTitle: "Withdrawal",
                                 iconImage: AssetImage("assets/withdraw.png"),
-                                onPressed: (){}, arrow: true,
+                                onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => WithdrawalScreen()),
+                                  );
+                                },
+                              arrow: true,
                             ),
                             SizedBox(
                               height: 15,
@@ -132,13 +147,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: screenWeight,
               height: screenHeight * 0.33,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)
+                ),
                 color: AppColors.primaryGreenColor,
               ),
               child: Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () async{
+                            await loginProvider.logout(); // Call logout
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => AuthLoginScreen()),
+                            );
+                          },
+                            child: Icon(Icons.logout_rounded, color: AppColors.softWhite, size: 30,)
+                        )
+                      ],
+                    ),
+                  ),
                   SizedBox(
-                    height: 50,
+                    height: 20,
                   ),
                   UiText(
                       text: "My Profile",
@@ -168,7 +203,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 20,
                   ),
                   OutlinedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => WithdrawScreen()),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(width: 2, color: Colors.white),
                         shape: RoundedRectangleBorder(

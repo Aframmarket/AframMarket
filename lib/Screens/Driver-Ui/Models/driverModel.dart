@@ -1,5 +1,4 @@
 
-
 class DriverModel {
   String? firstname;
   String? lastname;

@@ -1,7 +1,5 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
-import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp1.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/forgotPassword.dart';
-import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:afram_project/main.dart';
@@ -460,16 +458,16 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                           ],
                                         ),
                                       ),
-                                      // ElevatedButton(
-                                      //   // Within the `FirstRoute` widget:
-                                      //     onPressed: () {
-                                      //       Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(builder: (context) => const AuthSignUp2()),
-                                      //       );
-                                      //     },
-                                      //     child: Text("Navigate")
-                                      // ),
+                                      ElevatedButton(
+                                        // Within the `FirstRoute` widget:
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => Home()),
+                                            );
+                                          },
+                                          child: Text("Navigate")
+                                      ),
                                       SizedBox(
                                         height: 30,
                                       )

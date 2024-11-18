@@ -22,46 +22,49 @@ class UiProfileCard extends StatefulWidget {
 class _UiProfileCardState extends State<UiProfileCard> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            child: Row(
-              children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
+    return GestureDetector(
+      onTap: widget.onPressed,
+      child: SizedBox(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              child: Row(
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                    ),
+                    child: Image(
+                      image: widget.iconImage,
+                    ),
                   ),
-                  child: Image(
-                    image: widget.iconImage,
+                  SizedBox(
+                    width: 10,
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                UiText(
-                    text: widget.cardTitle,
-                    textColor: AppColors.darkTxt5,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400),
-              ],
+                  UiText(
+                      text: widget.cardTitle,
+                      textColor: AppColors.darkTxt5,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400),
+                ],
+              ),
             ),
-          ),
-          widget.arrow ? Icon(
-            Icons.arrow_forward_ios_outlined,
-            color: AppColors.iconColorDark,
-            size: 15,
-          ) : UiText(
-              text: "29K",
-              textColor: AppColors.softTxt2,
-              fontSize: 17,
-              fontWeight: FontWeight.w700
-          )
-        ],
+            widget.arrow ? Icon(
+              Icons.arrow_forward_ios_outlined,
+              color: AppColors.iconColorDark,
+              size: 15,
+            ) : UiText(
+                text: "29K",
+                textColor: AppColors.softTxt2,
+                fontSize: 17,
+                fontWeight: FontWeight.w700
+            )
+          ],
+        ),
       ),
     );
   }

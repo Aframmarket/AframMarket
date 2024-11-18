@@ -1,3 +1,5 @@
+import 'package:afram_project/Screens/Driver-Ui/sideScreens/deliveryScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/sideScreens/ongoingDeliviries.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
@@ -398,7 +400,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ),
               ),
-            )
+            ),
+            ElevatedButton(
+              // Within the `FirstRoute` widget:
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OpenDeliveriesScreen()),
+                  );
+                },
+                child: Text("Navigate")
+            ),
+
+            ElevatedButton(
+              // Within the `FirstRoute` widget:
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OngoingDeliveryScreen()),
+                  );
+                },
+                child: Text("ongoing deliviries")
+            ),
           ],
         ),
       ),

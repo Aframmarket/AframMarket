@@ -8,9 +8,11 @@ import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/qrCodeScanner.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/openDelivery_provider.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Driver-Ui/provider/driver_signup_provider.dart';
@@ -49,12 +51,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoginProvider>(
           create: (_) => LoginProvider(),
         ),
+        ChangeNotifierProvider<OrderProvider>(
+          create: (_) => OrderProvider(),
+        )
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'AframMarket',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            textTheme: GoogleFonts.senTextTheme(),
+            // colorScheme: ColorScheme.fromSwatch().copyWith(
+            //   primary: Colors.white,
+            // ),
             useMaterial3: true,
           ),
           //to navigate after onboarding

@@ -26,6 +26,7 @@ class AppColors{
   static const Color lightGreyBg2 = Color(0xffECF0F4);
   static const Color activeGreen = Color(0xff34C759);
   static const Color darkTxt6 = Color(0xff1A1F36);
+  static const Color greyTxt3 = Color(0xff282A31);
   static const Color greyTxt = Color(0xff696F8C);
   static const Color greyTxt2 = Color(0xffA5ACB8);
   static const Color borderColor = Color(0xffE4E8EE);
