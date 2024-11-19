@@ -1,3 +1,4 @@
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/editProfile.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -211,7 +212,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           Spacer(),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-            child: LargeBtn(btnText: "Edit profile", btnColor: AppColors.primaryYellowColor, onTap: (){}, btnTextColor: Colors.white),
+            child: LargeBtn(
+                btnText: "Edit profile",
+                btnColor: AppColors.primaryYellowColor,
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                  );
+                },
+                btnTextColor: Colors.white),
           ),
           SizedBox(height: 100,)
         ],

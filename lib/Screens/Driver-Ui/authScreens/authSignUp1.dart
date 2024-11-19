@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:afram_project/Screens/Driver-Ui/Models/driverUserModel.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/authSignUp.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/otpScreen.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
@@ -25,8 +26,12 @@ class AuthSignUp1 extends StatefulWidget {
 
 class _AuthSignUp1State extends State<AuthSignUp1> {
   final _formKey = GlobalKey<FormState>();
-  late String selectedStateId;
-  List<Map<String, dynamic>> states = [];
+  // late String selectedStateId;
+  // List<Map<String, dynamic>> states = [];
+  List<dynamic> states = [];
+  List<dynamic> cities = [];
+  String? selectedStateId;
+  String? selectedCityName;
 
   //show password
   bool showPassword = false;
@@ -36,11 +41,12 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
+  // final TextEditingController _cityController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchStates();
+    loadStates();
   }
 
   @override
@@ -60,39 +66,38 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
     });
   }
 
-  Future<void> fetchStates() async {
+
+  Future<void> loadStates() async {
     try {
-      final response = await http.get(
-        Uri.parse('https://aframmarket.com/sandbox/api/utils/driver-states'),
-        headers: {
-          'API-Key': 'aCvdsQwr4QgddXoiPJB9BeA8YmPva5sZm2',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<Map<String, dynamic>> fetchedStates = (data['states'] as List).map((state) {
-          return {
-            'id': state['id'],
-            'name': state['name'],
-          };
-        }).toList();
-
-        setState(() {
-          states = fetchedStates;
-        });
-      } else {
-        throw Exception('Failed to load states: ${response.reasonPhrase}');
-      }
+      String jsonString = await rootBundle.loadString('assets/JSON/statesAndCities.json');
+      final jsonResponse = json.decode(jsonString);
+      setState(() {
+        states = jsonResponse['states'];
+      });
     } catch (e) {
-      // Show a SnackBar with the error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      // Handle error
+      print('Error loading JSON: $e');
     }
   }
 
+  void onStateSelected(Map<String, dynamic> selectedState) {
+    setState(() {
+      selectedStateId = selectedState['id']; // Store the ID
+      _stateController.text = selectedStateId!; // Controller holds the ID
+      // Reset city selection
+      selectedCityName = null;
+      // _cityController.text = '';
+      cities = [];
+
+      // Update the cities list based on the selected state
+      final state = states.firstWhere(
+            (state) => state['id'].toString() == selectedStateId,
+      );
+      cities = state['cities'];
+      // Print the ID of the selected state
+      print('Selected State ID: $selectedStateId');
+    });
+  }
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
@@ -101,7 +106,7 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
         repeatPassword: _repeatPasswordController.text.trim(),
-        state: selectedStateId,
+        state: selectedStateId.toString(),
       );
 
       // Call the signUp method from the provider
@@ -326,11 +331,11 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                                 fillColor: AppColors.softWhite,
                                                 contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 15,
+                                                    vertical: 20,
                                                     horizontal: 15),
-                                                hintStyle: TextStyle(
-                                                    color: AppColors.softIconColor,
-                                                    fontSize: 14.0),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontSize: 14.0),
                                               ),
                                             )
                                           ],
@@ -425,55 +430,21 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                                     fontSize: 14.0),
                                               ),
                                             ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "State",
-                                              style: GoogleFonts.sen(
-                                                color: Colors.black,
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .displayLarge,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
+                                            SizedBox(height: 10),
+                                            // State Dropdown
                                             CustomDropdownField(
                                               hintText: 'Select State',
-                                              items: states.map((state) => {
-                                                'name': state['name'] as String,
-                                                'id': state['id'] as String,
+                                              items: states.map<Map<String, dynamic>>((state) {
+                                                return {
+                                                  'id': state['id'].toString(),
+                                                  'name': state['name'],
+                                                  'controllerValue': state['id'].toString(), // Store ID in controller
+                                                };
                                               }).toList(),
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  _stateController.text = newValue;
-                                                });
-                                              },
                                               controller: _stateController,
+                                              onChanged: onStateSelected, fieldName: 'State', // Use the method here
                                             ),
                                             SizedBox(height: 20),
-                                            // DropdownButton<String>(
-                                            //   hint: Text("Select a State"),
-                                            //   padding: EdgeInsets.all(8),
-                                            //   dropdownColor: Colors.white,
-                                            //   underline: SizedBox(),
-                                            //   isExpanded: true,
-                                            //   value: selectedStateId,
-                                            //   onChanged: (String? newValue) {
-                                            //     setState(() {
-                                            //       selectedStateId = newValue!;
-                                            //     });
-                                            //     print("Selected State ID: $selectedStateId"); // This gives you the ID of the selected state
-                                            //   },
-                                            //   items: states.map((state) {
-                                            //     return DropdownMenuItem<String>(
-                                            //       value: state['id'], // Set the ID as the value
-                                            //       child: Text(state['name']!), // Display the state name
-                                            //     );
-                                            //   }).toList(),
-                                            // ),
                                             UiText(
                                                 text:
                                                 "The password should be at least 11 characters long with lower case, upper case and numbers",
@@ -509,7 +480,7 @@ class _AuthSignUp1State extends State<AuthSignUp1> {
                                     onPressed: (){
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => OtpVerificationScreen(email: _emailController.text.trim())),
+                                        MaterialPageRoute(builder: (context) => AuthSignUpScreen(userId: "78", email: "amrohore4real@gmail.com")),
                                       );
                                     },
                                     child: Text("Otp screen")),

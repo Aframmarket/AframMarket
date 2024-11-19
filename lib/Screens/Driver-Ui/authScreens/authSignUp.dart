@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
+import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,9 @@ class AuthSignUpScreen extends StatefulWidget {
 class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   List<dynamic> states = [];
-  List<Map<String, dynamic>> cities = [];
+  List<dynamic> cities = [];
+  String? selectedStateId;
+  String? selectedCityName;
 
   // Controllers for form fields
   final TextEditingController _firstNameController = TextEditingController();
@@ -46,43 +49,52 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
   @override
   void initState() {
     super.initState();
-    fetchStates();
+    loadStates();
     _userIdController = TextEditingController(text: widget.userId);
     _emailController = TextEditingController(text: widget.email);
   }
 
-  Future<void> fetchStates() async {
+
+  Future<void> loadStates() async {
     try {
-      final response = await http.get(
-        Uri.parse('https://aframmarket.com/sandbox/api/utils/driver-states'),
-        headers: {
-          'API-Key': 'aCvdsQwr4QgddXoiPJB9BeA8YmPva5sZm2',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<Map<String, dynamic>> fetchedStates =
-            (data['states'] as List).map((state) {
-          return {
-            'id': state['id'],
-            'name': state['name'],
-          };
-        }).toList();
-
-        setState(() {
-          states = fetchedStates;
-        });
-      } else {
-        throw Exception('Failed to load states: ${response.reasonPhrase}');
-      }
+      String jsonString = await rootBundle.loadString('assets/JSON/statesAndCities.json');
+      final jsonResponse = json.decode(jsonString);
+      setState(() {
+        states = jsonResponse['states'];
+      });
     } catch (e) {
-      // Show a SnackBar with the error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      // Handle error
+      print('Error loading JSON: $e');
     }
+  }
+  void onStateSelected(Map<String, dynamic> selectedState) {
+    setState(() {
+      selectedStateId = selectedState['id']; // Store the ID
+      _stateController.text = selectedStateId!; // Controller holds the ID
+
+      // Reset city selection
+      selectedCityName = null;
+      _cityController.text = '';
+      cities = [];
+
+      // Update the cities list based on the selected state
+      final state = states.firstWhere(
+            (state) => state['id'].toString() == selectedStateId,
+      );
+      cities = state['cities'];
+      // Print the ID of the selected state
+      print('Selected State ID: $selectedStateId');
+    });
+  }
+
+  void onCitySelected(Map<String, dynamic> selectedCity) {
+    setState(() {
+      selectedCityName = selectedCity['name']; // Store the name
+      _cityController.text = selectedCityName!; // Controller holds the name
+
+      // Print the name of the selected city
+      print('Selected City Name: $selectedCityName');
+    });
   }
 
   void _submit() async {
@@ -277,77 +289,35 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
                                     showIcon: false,
                                     readOnly: false,
                                   ),
+                                  // State Dropdown
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "State",
-                                          style: GoogleFonts.sen(
-                                            color: Colors.black,
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .displayLarge,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        CustomDropdownField(
-                                          hintText: 'Select State',
-                                          items: states
-                                              .map((state) => {
-                                                    'name':
-                                                        state['name'] as String,
-                                                    'id': state['id'] as String,
-                                                  })
-                                              .toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              _stateController.text = newValue;
-                                            });
-                                          },
-                                          controller: _stateController,
-                                        ),
-                                      ],
+                                    child: CustomDropdownField(
+                                      hintText: 'Select State',
+                                      items: states.map<Map<String, dynamic>>((state) {
+                                        return {
+                                          'id': state['id'].toString(),
+                                          'name': state['name'],
+                                          'controllerValue': state['id'].toString(), // Store ID in controller
+                                        };
+                                      }).toList(),
+                                      controller: _stateController,
+                                      onChanged: onStateSelected, fieldName: 'State', // Use the method here
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "City",
-                                          style: GoogleFonts.sen(
-                                            color: Colors.black,
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .displayLarge,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        CustomDropdownField(
-                                          hintText: 'Select City',
-                                          items: cities,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              _cityController.text =
-                                                  newValue; // Update the controller
-                                            });
-                                          },
-                                          controller: _cityController,
-                                        ),
-                                      ],
+                                    padding: const EdgeInsets.all(10),
+                                    child: CustomDropdownField(
+                                      hintText: 'Select City',
+                                      items: cities.map<Map<String, dynamic>>((city) {
+                                        return {
+                                          'id': city['id'].toString(),
+                                          'name': city['name'],
+                                          'controllerValue': city['name'], // Store name in controller
+                                        };
+                                      }).toList(),
+                                      controller: _cityController,
+                                      onChanged: onCitySelected, fieldName: 'City', // Use the method here
                                     ),
                                   ),
                                   // Zipcode
