@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
-import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

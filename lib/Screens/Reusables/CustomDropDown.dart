@@ -11,13 +11,13 @@ class CustomDropdownField extends StatefulWidget {
   final String fieldName;
 
   const CustomDropdownField({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.items,
     required this.onChanged,
     this.controller,
     required this.fieldName,
-  }) : super(key: key);
+  });
 
   @override
   _CustomDropdownFieldState createState() => _CustomDropdownFieldState();

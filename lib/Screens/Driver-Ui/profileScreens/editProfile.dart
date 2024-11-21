@@ -1,6 +1,5 @@
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
-
 import '../../Colors/colors.dart';
 import '../../Reusables/UIText.dart';
 

@@ -13,14 +13,27 @@ import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Screens/Driver-Ui/HiveModels/company.dart';
+import 'Screens/Driver-Ui/HiveModels/upload.dart';
+import 'Screens/Driver-Ui/HiveModels/user.dart';
 import 'Screens/Driver-Ui/provider/driver_signup_provider.dart';
 import 'Screens/Driver-Ui/provider/signup_provider.dart';
 import 'Screens/Driver-Ui/provider/verification_provider.dart';
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
+  // Register Hive adapters
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(CompanyAdapter());
+  Hive.registerAdapter(UploadAdapter());
+
   //shared preference instance
   final prefs = await SharedPreferences.getInstance();
   final showHome = prefs.getBool('showHome') ?? false;
