@@ -49,7 +49,9 @@ class OrderProvider with ChangeNotifier {
                 );
               }).toList(),
               grandTotal: double.tryParse(order['grandtotal']?.toString() ?? '0') ?? 0.0, // Ensure proper parsing
-              status: order['status'] ?? 0, // Include the status if available or default to 0
+              status: order['status'] ?? 0,
+              firstname: order['firstname'] ?? '',
+              lastname: order['lastname'] ?? '', // Include the status if available or default to 0
             );
           }).toList();
         } else {
@@ -132,6 +134,8 @@ class OrderProvider with ChangeNotifier {
               orderDate: order['orderdate'] ?? '',
               deliveryFee: double.tryParse(order['delivery_fee']?.toString() ?? '0') ?? 0.0,
               shippingAddress: order['shipping_address'] ?? '',
+              firstname: order['firstname'] ?? '',
+              lastname: order['lastname'] ?? '',
               products: (order['products'] as List).map((product) {
                 return Product(
                   name: product['name'] ?? '',

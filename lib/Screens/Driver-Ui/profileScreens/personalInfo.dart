@@ -1,82 +1,34 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/editProfile.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import '../../Colors/colors.dart';
 import '../../Reusables/UIText.dart';
 import '../HiveModels/user.dart';
+import '../provider/userProvider.dart';
 
-class PersonalInfoScreen extends StatefulWidget {
+class PersonalInfoScreen extends StatelessWidget {
+
   const PersonalInfoScreen({super.key});
 
   @override
-  State<PersonalInfoScreen> createState() => _PersonalInfoScreenState();
-}
-
-class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
-
-  User? user; // State variable to hold user data
-  bool isLoading = true; // State variable to indicate loading status
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData(); // Fetch user data when the widget is initialized
-  }
-
-
-  Future<void> _loadUserData() async {
-    try {
-      final secureStorage = FlutterSecureStorage();
-      final keyString = await secureStorage.read(key: 'hiveKey');
-      if (keyString == null) {
-        print('Encryption key not found');
-        // Handle the case where the encryption key is missing
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
-      final encryptionKey = base64Url.decode(keyString);
-      var userBox = await Hive.openBox<User>(
-        'userBox',
-        encryptionCipher: HiveAesCipher(encryptionKey),
-      );
-      User? retrievedUser = userBox.get('currentUser');
-      if (retrievedUser != null) {
-        print('User data retrieved: ${retrievedUser.firstname}');
-        setState(() {
-          user = retrievedUser;
-          isLoading = false;
-        });
-      } else {
-        print('User not found in Hive');
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      print('Error retrieving user data: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      // Show a loading indicator while data is being fetched
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+
+    //profile picture path
+    String? profilePicturePath = userProvider.user?.profilePicturePath;
+
+    if (userProvider.isLoading) {
+      // loading indicator while data is being fetched
       return Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
-    } else if (user != null) {
-      // User data is available
+    } else if (userProvider.user != null) {
+      User user = userProvider.user!;
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.bgWhite,
         body: Column(
           children: [
             SizedBox(
@@ -121,16 +73,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage("assets/imgProfile.jpeg"),
-                    radius: 40,
+                    backgroundImage: profilePicturePath != null && File(profilePicturePath).existsSync() ?
+                    FileImage(File(profilePicturePath)) : AssetImage('assets/profile_placeHolder.png'),
+                    radius: 30,
                   ),
                   SizedBox(width: 10,),
                   SizedBox(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        UiText(text: "${user!.firstname} ${user!.lastname}", textColor: AppColors.darkTxt4, fontSize: 20, fontWeight: FontWeight.w700),
-                        UiText(text: user!.email, textColor: AppColors.hintTextColor, fontSize: 14, fontWeight: FontWeight.w400),
+                        UiText(text: "${user.firstname} ${user.lastname}", textColor: AppColors.darkTxt4, fontSize: 20, fontWeight: FontWeight.w700),
+                        UiText(text: user.email, textColor: AppColors.hintTextColor, fontSize: 14, fontWeight: FontWeight.w400),
                       ],
                     ),
                   )
@@ -169,7 +122,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         SizedBox(
                           height: 8,
                         ),
-                        Text("${user!.firstname} ${user!.lastname}", style: GoogleFonts.inter(
+                        Text("${user.firstname} ${user.lastname}", style: GoogleFonts.inter(
                           color: AppColors.greyTxt2,
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 14,
@@ -213,7 +166,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         SizedBox(
                           height: 8,
                         ),
-                        Text(user!.email, style: GoogleFonts.inter(
+                        Text(user.email, style: GoogleFonts.inter(
                           color: AppColors.greyTxt2,
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 14,
@@ -257,7 +210,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         SizedBox(
                           height: 8,
                         ),
-                        Text(user!.phone, style: GoogleFonts.inter(
+                        Text(user.phone, style: GoogleFonts.inter(
                           color: AppColors.greyTxt2,
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 14,
@@ -278,7 +231,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                      MaterialPageRoute(builder: (context) => EditProfileScreen(
+                        firstname: user.firstname, lastname: user.lastname,
+                        emailAddress: user.email, phoneNumber: user.phone,)
+                      ),
                     );
                   },
                   btnTextColor: Colors.white),

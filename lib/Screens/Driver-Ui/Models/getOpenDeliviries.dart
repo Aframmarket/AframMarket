@@ -3,6 +3,8 @@ class Order {
   final String cartSessionId;
   final int id;
   final int userId;
+  final String firstname;
+  final String lastname;
   final String orderDate;
   final double deliveryFee;
   final String shippingAddress;
@@ -15,6 +17,8 @@ class Order {
     required this.id,
     required this.userId,
     required this.orderDate,
+    required this.firstname,
+    required this.lastname,
     required this.deliveryFee,
     required this.shippingAddress,
     required this.products,

@@ -90,9 +90,6 @@ class _AuthSignUpScreenState extends State<AuthSignUpScreen> {
     setState(() {
       selectedCityName = selectedCity['name']; // Store the name
       _cityController.text = selectedCityName!; // Controller holds the name
-
-      // Print the name of the selected city
-      print('Selected City Name: $selectedCityName');
     });
   }
 

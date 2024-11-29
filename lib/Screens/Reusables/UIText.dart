@@ -20,6 +20,7 @@ class UiText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
+      softWrap: true,
       text,
       style: GoogleFonts.sen(
         color: textColor,

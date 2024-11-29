@@ -1,4 +1,6 @@
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/deliveryProfile.dart';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/genaralProfile.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/supportScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
@@ -12,6 +14,7 @@ class HelpCenterScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgWhite,
       body: Column(
+
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
@@ -87,15 +90,15 @@ class HelpCenterScreen extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GeneralProfileScreen()),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GeneralProfileScreen()),
+                );
+              },
               child: Container(
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
@@ -138,67 +141,31 @@ class HelpCenterScreen extends StatelessWidget {
           SizedBox(height: 10,),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ImageIcon(
-                    AssetImage("assets/deliveries.png"),
-                    color: Color(0xFFFFA043),
-                  ),
-                  SizedBox(width: 8,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Delivery", style: GoogleFonts.inter(
-                        color: AppColors.black,
-                        textStyle: Theme.of(context).textTheme.displayLarge,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("Scheduled delivery", style: GoogleFonts.inter(
-                        color: AppColors.greyTxt2,
-                        textStyle: Theme.of(context).textTheme.displayLarge,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),)
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 10,),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ImageIcon(
-                    AssetImage("assets/support.png"),
-                    color: Color(0xFF000000),
-                  ),
-                  SizedBox(width: 8,),
-                  Expanded(
-                    child: Column(
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DeliverProfileScreen()),
+              );
+                },
+              child: Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ImageIcon(
+                      AssetImage("assets/deliveries.png"),
+                      color: Color(0xFFFFA043),
+                    ),
+                    SizedBox(width: 8,),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Support", style: GoogleFonts.inter(
+                        Text("Delivery", style: GoogleFonts.inter(
                           color: AppColors.black,
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 16,
@@ -207,17 +174,69 @@ class HelpCenterScreen extends StatelessWidget {
                         SizedBox(
                           height: 8,
                         ),
-                        Text("Need help?, reach out to our customer support for answers",
-                          style: GoogleFonts.inter(
+                        Text("Scheduled delivery", style: GoogleFonts.inter(
                           color: AppColors.greyTxt2,
                           textStyle: Theme.of(context).textTheme.displayLarge,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),)
                       ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SupportChatScreen()),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ImageIcon(
+                      AssetImage("assets/support.png"),
+                      color: Color(0xFF000000),
                     ),
-                  )
-                ],
+                    SizedBox(width: 8,),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Support", style: GoogleFonts.inter(
+                            color: AppColors.black,
+                            textStyle: Theme.of(context).textTheme.displayLarge,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text("Need help?, reach out to our customer support for answers",
+                            style: GoogleFonts.inter(
+                            color: AppColors.greyTxt2,
+                            textStyle: Theme.of(context).textTheme.displayLarge,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

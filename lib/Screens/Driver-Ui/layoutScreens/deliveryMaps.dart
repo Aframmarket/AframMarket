@@ -84,7 +84,8 @@ class _DeliveryMapsScreenState extends State<DeliveryMapsScreen> {
   Future<List<LatLng>> getPolylinePoints() async {
     List<LatLng> polylinesCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(googleApiKey: GOOGLE_MAPS_API_KEY, request: PolylineRequest(
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey: GOOGLE_MAPS_API_KEY, request: PolylineRequest(
         origin: PointLatLng(_currentP!.latitude, _currentP!.longitude),
         destination: PointLatLng(_destinationPosition.latitude, _destinationPosition.longitude),
         mode: TravelMode.driving

@@ -30,6 +30,9 @@ class User extends HiveObject {
   @HiveField(7)
   Company company;
 
+  @HiveField(8)
+  String? profilePicturePath; // Add this line
+
   User({
     required this.id,
     required this.firstname,
@@ -39,6 +42,7 @@ class User extends HiveObject {
     required this.role,
     required this.dateCreated,
     required this.company,
+    this.profilePicturePath
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -50,5 +54,6 @@ class User extends HiveObject {
     role: json['role'],
     dateCreated: json['date_created'],
     company: Company.fromJson(json['company']),
+    profilePicturePath: json['profile_picture_path'],
   );
 }

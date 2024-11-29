@@ -1,5 +1,6 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/forgotPassword.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/userProvider.dart';
 import 'package:afram_project/Screens/Reusables/customEmailField.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:afram_project/main.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../provider/login_provider.dart';
 
 class AuthLoginScreen extends StatefulWidget {
   const AuthLoginScreen({super.key});
@@ -64,15 +64,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
 
-      bool success = await Provider.of<LoginProvider>(context, listen: false)
-          .login(email, password);
+
+      bool success = await Provider.of<UserProvider>(context, listen: false).login(email, password);
 
       if (success) {
         // Save credentials if "Remember Me" is checked
         if (_rememberMe) {
           _saveCredentials(email, password);
         } else {
-          _clearSavedCredentials(); // Clear saved credentials if not checked
+          _clearSavedCredentials();
         }
         // Navigate to Home Screen upon successful login
         Navigator.pushReplacement(
@@ -80,8 +80,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
           MaterialPageRoute(builder: (_) => Home()),
         );
       } else {
+
         String? error =
-            Provider.of<LoginProvider>(context, listen: false).errorMessage;
+            Provider.of<UserProvider>(context, listen: false).errorMessage;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(error ?? 'Login failed')));
       }
@@ -105,15 +106,18 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWeight = MediaQuery.of(context).size.width;
 
-    final loginProvider = Provider.of<LoginProvider>(context);
+    //using the user provider
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       backgroundColor: AppColors.primaryGreenColor,
-      body: loginProvider.isLoading
+      body: userProvider.isLoading
           ? Center(
               child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.primaryYellowColor)))
+                      AppColors.primaryYellowColor)
+              )
+      )
           : SizedBox(
               width: screenWeight,
               child: Column(
@@ -457,16 +461,16 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                           ],
                                         ),
                                       ),
-                                      ElevatedButton(
-                                        // Within the `FirstRoute` widget:
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => Home()),
-                                            );
-                                          },
-                                          child: Text("Navigate")
-                                      ),
+                                      // ElevatedButton(
+                                      //   // Within the `FirstRoute` widget:
+                                      //     onPressed: () {
+                                      //       Navigator.push(
+                                      //         context,
+                                      //         MaterialPageRoute(builder: (context) => Home()),
+                                      //       );
+                                      //     },
+                                      //     child: Text("Navigate")
+                                      // ),
                                       SizedBox(
                                         height: 30,
                                       )

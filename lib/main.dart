@@ -9,9 +9,11 @@ import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/qrCodeScanner.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/openDelivery_provider.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/userProvider.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -24,8 +26,14 @@ import 'Screens/Driver-Ui/provider/driver_signup_provider.dart';
 import 'Screens/Driver-Ui/provider/signup_provider.dart';
 import 'Screens/Driver-Ui/provider/verification_provider.dart';
 
+int? initScreen;
+
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  initScreen = prefs.getInt("initScreen");
+  await prefs.setInt("initScreen", 1);
 
   await Hive.initFlutter();
 
@@ -34,18 +42,12 @@ Future main() async{
   Hive.registerAdapter(CompanyAdapter());
   Hive.registerAdapter(UploadAdapter());
 
-  //shared preference instance
-  final prefs = await SharedPreferences.getInstance();
-  final showHome = prefs.getBool('showHome') ?? false;
-  runApp(MyApp(
-      showHome: showHome
-  ));
+  runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.showHome});
-
-  final bool showHome;
+  const MyApp({super.key, });
 
   // This widget is the root of your application.
   @override
@@ -66,27 +68,34 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<OrderProvider>(
           create: (_) => OrderProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (_) => UserProvider(),
         )
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'AframMarket',
-          theme: ThemeData(
-            textTheme: GoogleFonts.senTextTheme(),
-            // colorScheme: ColorScheme.fromSwatch().copyWith(
-            //   primary: Colors.white,
-            // ),
-            useMaterial3: true,
-          ),
-          //to navigate after onboarding
-          initialRoute: showHome ? '/logInScreen' : '/',
-          routes: {
-            '/': (context) => const OnboardingScreen(),  //no forget to put the onboarding screen here when  you're done
-            '/home': (context) => const Home(),
-            '/logInScreen': (context) => const AuthLoginScreen(),
-            '/signUpScreen': (context) => AuthSignUp1(),
-            '/gpsScreen': (context) => const AccessLocationScreen()
-          }),
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'AframMarket',
+            theme: ThemeData(
+              textTheme: GoogleFonts.senTextTheme(),
+              // colorScheme: ColorScheme.fromSwatch().copyWith(
+              //   primary: Colors.white,
+              // ),
+              useMaterial3: true,
+            ),
+        
+            //to navigate after onboarding
+            initialRoute: initScreen == 0 || initScreen == null ? '/' : '/logInScreen',
+            routes: {
+              '/': (context) => const OnboardingScreen(),  //no forget to put the onboarding screen here when  you're done
+              '/home': (context) => const Home(),
+              '/logInScreen': (context) => const AuthLoginScreen(),
+              '/signUpScreen': (context) => AuthSignUp1(),
+              '/gpsScreen': (context) => const AccessLocationScreen()
+            }),
+      ),
     );
   }
 }
@@ -141,6 +150,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppColors.bgWhite,
         extendBody: true,
         body: IndexedStack(
           index: _selectedIndex,

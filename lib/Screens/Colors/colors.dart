@@ -6,7 +6,7 @@ class AppColors{
   static const Color primaryLightYellowColor = Color(0xffFFF8DD);
   static const Color primaryGreenColor = Color(0xff173D2B);
   static const Color softText = Color(0xff838799);
-  static const Color softWhite = Color(0xffF0F5FA);
+  static const Color softWhite = Color(0xffF0F5FA);////
   static const Color softIconColor = Color(0xffB4B9CA);
   static const Color iconGrey = Color(0xffAFAFAF);
   static const Color bgWhite = Color(0xffF7F8F9);
@@ -31,8 +31,9 @@ class AppColors{
   static const Color greyTxt2 = Color(0xffA5ACB8);
   static const Color borderColor = Color(0xffE4E8EE);
   static const Color borderColor2 = Color(0xffDCDEE4);
+  static const Color borderColor3 = Color(0xffDCDEE4);
   static const Color hintTextColor = Color(0xffA0A5BA);
-  static const Color borderColor3 = Color(0xffEDEDED);
+  static const Color borderColor4 = Color(0xffF3F3F3);
   static const Color textRed =Color(0xffFF3326);
   static const Color textGreen =Color(0xff47BE55);
   static const Color black =Color(0xff101010);

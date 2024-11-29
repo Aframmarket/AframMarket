@@ -1,7 +1,6 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:flutter/material.dart';
-
 import '../../Reusables/deliveryCards.dart';
 
 

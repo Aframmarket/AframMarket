@@ -54,6 +54,13 @@ dependencies:
   flutter_secure_storage: ^9.2.2
     # For permission handling (optional but recommended)
   permission_handler: ^10.2.0
+  image: ^4.3.0
+  flutter_cache_manager: ^3.4.1
+  geocoding: ^3.0.0
+  expandable: ^5.0.1
+  flutter_screenutil: ^5.9.3
+  emoji_picker_flutter: ^3.1.0
+  flutter_keyboard_visibility: ^6.0.0
 
 flutter_native_splash:
   android: true

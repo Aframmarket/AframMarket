@@ -9,6 +9,12 @@
         <string>We need access to your location to show your current position.</string>
 
 
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This app requires access to your photo library to select profile pictures.</string>
+        <key>NSCameraUsageDescription</key>
+        <string>This app requires access to your camera to take profile pictures.</string>
+
+
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

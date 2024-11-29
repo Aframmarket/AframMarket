@@ -1,13 +1,13 @@
+import 'dart:io';
 import 'package:afram_project/Screens/Colors/colors.dart';
-import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:afram_project/Screens/Driver-Ui/sideScreens/recentDelivery.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/deliveryCards.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../provider/login_provider.dart';
 import '../provider/openDelivery_provider.dart';
+import '../provider/userProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -27,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // to show pending orders
   void showPendingBottomSheet() {
     showModalBottomSheet(
         useSafeArea: true,
@@ -43,8 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           .isEmpty // Check if there are no accepted orders
                       ? Center(
                           child: Text(
-                              'No new notifications')
-                            ) // Display message if no accepted orders
+                              'No new notifications')) // Display message if no accepted orders
                       : ListView.builder(
                           itemCount: orderProvider.acceptedOrders.length,
                           itemBuilder: (context, index) {
@@ -130,8 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               text: "Start Delivery.",
                                               textColor: Colors.white,
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w600)
-                                      )
+                                              fontWeight: FontWeight.w600))
                                     ],
                                   )
                                 ],
@@ -142,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  // to show scheduled orders
   void showScheduledBottomSheet() {
     showModalBottomSheet(
         backgroundColor: Colors.white,
@@ -189,8 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage("assets/fish.png"),
-                                    fit: BoxFit.cover)
-                            ),
+                                    fit: BoxFit.cover)),
                           ),
                         ),
                         SizedBox(
@@ -421,6 +419,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final orderProvider = Provider.of<OrderProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+
+    //profile picture path
+    String? profilePicturePath = userProvider.user?.profilePicturePath;
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWeight = MediaQuery.of(context).size.width;
@@ -468,9 +470,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     CircleAvatar(
-                      backgroundImage: AssetImage("assets/femaleReviewer.jpg"),
-                      radius: 30,
-                    )
+                      backgroundImage: profilePicturePath != null &&
+                              File(profilePicturePath).existsSync()
+                          ? FileImage(File(profilePicturePath))
+                          : AssetImage('assets/profile_placeHolder.png'),
+                      radius: 25,
+                    ),
                   ],
                 ),
               ),

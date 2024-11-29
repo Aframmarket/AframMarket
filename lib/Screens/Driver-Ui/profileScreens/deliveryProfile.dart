@@ -1,19 +1,16 @@
-import 'package:afram_project/Screens/Colors/colors.dart';
-import 'package:afram_project/Screens/Reusables/customAccordian.dart';
 import 'package:flutter/material.dart';
+import '../../Colors/colors.dart';
 import '../../Reusables/UIText.dart';
-import 'package:expandable/expandable.dart';
+import '../../Reusables/customAccordian.dart';
 
-
-class GeneralProfileScreen extends StatefulWidget {
-  const GeneralProfileScreen({super.key});
+class DeliverProfileScreen extends StatefulWidget {
+  const DeliverProfileScreen({super.key});
 
   @override
-  State<GeneralProfileScreen> createState() => _GeneralProfileScreenState();
+  State<DeliverProfileScreen> createState() => _DeliverProfileScreenState();
 }
 
-class _GeneralProfileScreenState extends State<GeneralProfileScreen> {
-
+class _DeliverProfileScreenState extends State<DeliverProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +45,7 @@ class _GeneralProfileScreenState extends State<GeneralProfileScreen> {
                     ),
                   ),
                   UiText(
-                      text: "General",
+                      text: "Sellers",
                       textColor: AppColors.darkTxt3,
                       fontSize: 17,
                       fontWeight: FontWeight.w500),
@@ -59,7 +56,7 @@ class _GeneralProfileScreenState extends State<GeneralProfileScreen> {
           ),
           Center(
               child: UiText(
-                  text: "Who we are?",
+                  text: "Scheduled delivery",
                   textColor: AppColors.darkTxt3,
                   fontSize: 20,
                   fontWeight: FontWeight.w500)),
@@ -70,18 +67,18 @@ class _GeneralProfileScreenState extends State<GeneralProfileScreen> {
             padding: const EdgeInsets.all(10.0),
             child: TextFormField(
               decoration: InputDecoration(
-                filled: true,
+                  filled: true,
                   fillColor: AppColors.softWhite,
                   hintText: "Search location",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),),
+                    borderRadius: BorderRadius.circular(10),),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),),
+                    borderRadius: BorderRadius.circular(10),),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),),
+                    borderRadius: BorderRadius.circular(10),),
                   prefixIcon: ImageIcon(AssetImage("assets/search_icon.png",))),
             ),
           ),
@@ -103,6 +100,6 @@ class _GeneralProfileScreenState extends State<GeneralProfileScreen> {
           Customaccordian(heading: 'Is The Market Open On Weekends?', body: "Open the Aframarket app to get started and follow the steps. Aframarket doesn't charge a fee to create or maintain your Aframaket account.")
         ],
       ),
-    );
+    );;
   }
 }

@@ -13,8 +13,8 @@ import 'package:afram_project/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    var showHome;
-    await tester.pumpWidget(MyApp(showHome: showHome,));
+
+    await tester.pumpWidget(MyApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
