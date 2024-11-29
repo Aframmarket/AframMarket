@@ -24,7 +24,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final orderProvider = Provider.of<OrderProvider>(context);
+
+    //order provider
+    final orderProvider = Provider.of<OrderProvider>(context);
+    // Used a consumer widget to display the contents upon a successful call, if problem arises with display...
+    // probably due to constraints arising from column and listview widgets
+
     return Consumer<OrderProvider>(builder: (context, orderProvider, child) {
       return Scaffold(
         backgroundColor: AppColors.bgWhite,

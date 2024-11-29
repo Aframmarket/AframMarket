@@ -10,6 +10,7 @@ import 'package:afram_project/Screens/Driver-Ui/layoutScreens/qrCodeScanner.dart
 import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/openDelivery_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/userProvider.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/withdraw_provider.dart';
 import 'package:afram_project/Screens/Onboarding-screen/onboarding.dart';
 import 'package:afram_project/Screens/Driver-Ui/authScreens/authLogIn.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider<WithdrawProvider>(
+          create: (_) => WithdrawProvider(),
         )
       ],
       child: ScreenUtilInit(

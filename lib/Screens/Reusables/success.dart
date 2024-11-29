@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({super.key});
+  final String text;
+  const SuccessScreen({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10,),
-                UiText(text: "#100", textColor: AppColors.greyTxt3, fontSize: 30, fontWeight: FontWeight.w800),
+                UiText(text: text, textColor: AppColors.greyTxt3, fontSize: 30, fontWeight: FontWeight.w800),
                 SizedBox(height: 10,),
                 UiText(text: "Withdraw Successful", textColor: AppColors.darkTxt5, fontSize: 22, fontWeight: FontWeight.w400),
                 SizedBox(height: 10,),
