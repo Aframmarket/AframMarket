@@ -70,7 +70,7 @@ class LoginProvider with ChangeNotifier {
       }
     } catch (e) {
       // Handle any exceptions
-      _errorMessage = 'An error occurred: $e';
+      _errorMessage = 'Something went wrong while trying to login, ensure u have a good internet connection.';
       _isLoading = false;
       notifyListeners();
       return false;
@@ -87,7 +87,6 @@ class LoginProvider with ChangeNotifier {
 
       await userBox.put('currentUser', user);
     } catch (e) {
-      print('Error storing user data: $e');
       _errorMessage = 'Failed to store user data.';
     }
   }
@@ -112,7 +111,6 @@ class LoginProvider with ChangeNotifier {
       );
       await userBox.delete('currentUser');
     } catch (e) {
-      print('Error during logout: $e');
       _errorMessage = 'Failed to logout.';
     }
   }

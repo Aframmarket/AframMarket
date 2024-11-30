@@ -1,4 +1,5 @@
 import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/profileScreens/address.dart';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/helpCenter.dart';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/personalInfo.dart';
 import 'package:afram_project/Screens/Driver-Ui/profileScreens/withdraw.dart';
@@ -127,7 +128,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             UiProfileCard(
                               cardTitle: "Address",
                               iconImage: AssetImage("assets/map.png"),
-                              onPressed: (){}, arrow: true,
+                              onPressed: (){
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => AddressScreen()),
+                                );
+                              }, arrow: true,
                             ),
                           ],
                         ),

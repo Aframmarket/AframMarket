@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:afram_project/Screens/Colors/colors.dart';
+import 'package:afram_project/Screens/Driver-Ui/authScreens/locationScreen.dart';
+import 'package:afram_project/Screens/Driver-Ui/layoutScreens/MapsViews/startDeliveryMap.dart';
 import 'package:afram_project/Screens/Driver-Ui/sideScreens/recentDelivery.dart';
 import 'package:afram_project/Screens/Reusables/UIText.dart';
 import 'package:afram_project/Screens/Reusables/deliveryCards.dart';
@@ -113,23 +115,74 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                       ),
-                                      OutlinedButton(
-                                          onPressed: () {},
-                                          style: OutlinedButton.styleFrom(
-                                            backgroundColor:
-                                                AppColors.textGreen,
-                                            side: BorderSide(
-                                                width: 2, color: Colors.white),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0),
-                                            ),
-                                          ),
-                                          child: UiText(
-                                              text: "Start Delivery.",
-                                              textColor: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600))
+                                      order.deliveryStarted
+                                          ? OutlinedButton(
+                                              onPressed: () {
+                                                // Navigate to view delivery
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StartDeliverMapScreen(
+                                                      destinationAddress:
+                                                          "NNPC E&P Limited",
+                                                      isViewing: true,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.textGreen,
+                                                side: BorderSide(
+                                                    width: 2,
+                                                    color: Colors.white),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                              ),
+                                              child: UiText(
+                                                text: "View Delivery",
+                                                textColor: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            )
+                                          : OutlinedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  order.deliveryStarted = true;
+                                                });
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            StartDeliverMapScreen(
+                                                              destinationAddress:
+                                                                  order
+                                                                      .shippingAddress,
+                                                              isViewing: false,
+                                                            )));
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.textGreen,
+                                                side: BorderSide(
+                                                    width: 2,
+                                                    color: Colors.white),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                              ),
+                                              child: UiText(
+                                                  text: "Start Delivery.",
+                                                  textColor: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600))
                                     ],
                                   )
                                 ],

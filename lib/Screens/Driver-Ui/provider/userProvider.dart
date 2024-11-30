@@ -233,7 +233,7 @@ class UserProvider with ChangeNotifier {
       return false;
     }
     catch (e) {
-      _errorMessage = 'Error during login: $e';
+      _errorMessage = 'Something went wrong, ensure you have a strong internet connection.';
       _isLoading = false;
       notifyListeners();
       return false;

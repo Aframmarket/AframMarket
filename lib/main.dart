@@ -7,6 +7,7 @@ import 'package:afram_project/Screens/Driver-Ui/layoutScreens/homeScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/notificationScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/profileScreen.dart';
 import 'package:afram_project/Screens/Driver-Ui/layoutScreens/qrCodeScanner.dart';
+import 'package:afram_project/Screens/Driver-Ui/provider/delivery_map_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/login_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/openDelivery_provider.dart';
 import 'package:afram_project/Screens/Driver-Ui/provider/userProvider.dart';

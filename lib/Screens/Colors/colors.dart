@@ -38,4 +38,6 @@ class AppColors{
   static const Color textGreen =Color(0xff47BE55);
   static const Color black =Color(0xff101010);
   static const Color greyTxt1 =Color(0xff878787);
+  static const Color greyTxt4 =Color(0xffB0B0B0);
+  static const Color darkTxt7 =Color(0xff06130D);
 }

@@ -18,10 +18,35 @@ class DeliveryMapProvider with ChangeNotifier {
   LatLng? get destinationPosition => _destinationPosition;
   Map<PolylineId, Polyline> get polylines => _polylines;
   Completer<GoogleMapController> get mapController => _mapController;
+  bool isDeliveryOngoing = false;
 
-  DeliveryMapProvider() {
+  // Constructor accepting the destination address
+  DeliveryMapProvider({required String destinationAddress}) {
     _initLocationUpdates();
+    setDestinationAddress(destinationAddress);
+    isDeliveryOngoing = true;
   }
+
+  Future<void> setDestinationAddress(String address) async {
+    try {
+      List<geocoding.Location> locations = await geocoding.locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        _destinationPosition = LatLng(
+          locations[0].latitude,
+          locations[0].longitude,
+        );
+        notifyListeners();
+
+        // Draw polyline if current position is already set
+        if (_currentPosition != null) {
+          _drawPolyline();
+        }
+      }
+    } catch (e) {
+      print('Error in geocoding: $e');
+    }
+  }
+
 
   Future<void> _initLocationUpdates() async {
     bool serviceEnabled = await _locationController.serviceEnabled();
@@ -45,24 +70,13 @@ class DeliveryMapProvider with ChangeNotifier {
         _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
         notifyListeners();
         _updateCameraPosition(_currentPosition!);
+
+        // Draw polyline if destination is already set
+        if (_destinationPosition != null) {
+          _drawPolyline();
+        }
       }
     });
-  }
-
-  Future<void> setDestinationAddress(String address) async {
-    try {
-      List<geocoding.Location> locations = await geocoding.locationFromAddress(address);
-      if (locations.isNotEmpty) {
-        _destinationPosition = LatLng(
-          locations[0].latitude,
-          locations[0].longitude,
-        );
-        notifyListeners();
-        _drawPolyline();
-      }
-    } catch (e) {
-      print('Error in geocoding: $e');
-    }
   }
 
   Future<void> _drawPolyline() async {
@@ -88,6 +102,7 @@ class DeliveryMapProvider with ChangeNotifier {
       print('Error fetching polyline: ${result.errorMessage}');
     }
   }
+
 
   void _addPolyline(List<LatLng> polylineCoordinates) {
     PolylineId id = PolylineId('poly');

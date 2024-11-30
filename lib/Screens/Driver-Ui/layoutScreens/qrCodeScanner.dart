@@ -120,14 +120,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                 )
             ),
           ),
-          // TextButton(
-          //   onPressed: _uploadFromGallery,
-          //   child: Text(
-          //     "UPLOAD",
-          //     style:
-          //         TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
-          //   ),
-          // ),
           SizedBox(height: 10),
           GestureDetector(
             onTap: _scanQRCode,
@@ -137,17 +129,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
               fontSize: 20,
               fontWeight: FontWeight.w400)
           ),
-          // ElevatedButton(
-          //   onPressed: _scanQRCode,
-          //   style: ElevatedButton.styleFrom(
-          //     foregroundColor: Colors.white,
-          //     backgroundColor: Colors.yellow[600],
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //   ),
-          //   child: Text("Completed"),
-          // ),
           SizedBox(
             height: 20,
           ),

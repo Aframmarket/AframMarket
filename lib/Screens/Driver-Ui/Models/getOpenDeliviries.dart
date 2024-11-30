@@ -11,6 +11,7 @@ class Order {
   final List<Product> products;
   final double grandTotal;
   int status; // Field to track the order's acceptance status
+  bool deliveryStarted;
 
   Order({
     required this.cartSessionId,
@@ -24,6 +25,7 @@ class Order {
     required this.products,
     required this.grandTotal,
     this.status = 0, // Default status to 0 (not accepted)
+    this.deliveryStarted = false,
   });
 }
 
