@@ -124,8 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         StartDeliverMapScreen(
-                                                      destinationAddress:
-                                                          "NNPC E&P Limited",
+                                                      destinationAddress: order.shippingAddress,
                                                       isViewing: true,
                                                     ),
                                                   ),

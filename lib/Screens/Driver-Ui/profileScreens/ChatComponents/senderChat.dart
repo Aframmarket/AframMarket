@@ -12,28 +12,25 @@ class Senderchat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Align(
-      alignment: Alignment.topRight,
-      child: SizedBox(
-        width: 268,
+      alignment: Alignment.centerRight,
+      child: IntrinsicWidth(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UiText(text: "8:11 pm", textColor: AppColors.lightTxt, fontSize: 12, fontWeight: FontWeight.w400),
             SizedBox(height: 5,),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryYellowColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10))
-                    ),
-                    padding: EdgeInsets.all(15),
-                    child: UiText(text: message,
-                        textColor: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.primaryYellowColor,
+                      borderRadius: BorderRadius.all(Radius.circular(10))
                   ),
+                  padding: EdgeInsets.all(15),
+                  child: UiText(text: message,
+                      textColor: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
                 ),
                 SizedBox(width: 10,),
                 CircleAvatar(

@@ -100,6 +100,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           ),
           Expanded(
             child: TextField(
+              cursorColor: AppColors.primaryGreenColor,
               controller: _controller,
               focusNode: _focusNode,
               decoration: InputDecoration.collapsed(
@@ -116,7 +117,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           ),
           IconButton(
             icon: Icon(Icons.send),
-            color: Theme.of(context).primaryColor,
+            color: AppColors.primaryYellowColor,
             onPressed: _sendMessage,
           ),
         ],
@@ -228,14 +229,17 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           ),
           Flexible(
             fit: FlexFit.loose,
-            child: Column(
-              children: [
-                _buildMessageList(),
-                SizedBox(height: 20,),
-                Divider(height: 1),
-                _buildInputArea(),
-                _buildEmojiPicker(),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  _buildMessageList(),
+                  SizedBox(height: 20,),
+                  Divider(height: 1),
+                  _buildInputArea(),
+                  _buildEmojiPicker(),
+                ],
+              ),
             ),
           ),
           // Align(

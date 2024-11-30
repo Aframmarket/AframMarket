@@ -129,9 +129,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               cardTitle: "Address",
                               iconImage: AssetImage("assets/map.png"),
                               onPressed: (){
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (_) => AddressScreen()),
+                                  MaterialPageRoute(builder: (context) => AddressScreen()),
                                 );
                               }, arrow: true,
                             ),

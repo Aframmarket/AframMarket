@@ -40,4 +40,5 @@ class AppColors{
   static const Color greyTxt1 =Color(0xff878787);
   static const Color greyTxt4 =Color(0xffB0B0B0);
   static const Color darkTxt7 =Color(0xff06130D);
+  static const Color borderColor5 =Color(0xffE7E7E7);
 }
