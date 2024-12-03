@@ -7,6 +7,8 @@ import 'package:afram_project/Screens/Reusables/deliveryCards.dart';
 import 'package:afram_project/Screens/Reusables/largeButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../Reusables/dashboard_pie_chart.dart';
+import '../provider/dashboard_provider.dart';
 import '../provider/openDelivery_provider.dart';
 import '../provider/userProvider.dart';
 
@@ -18,12 +20,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late DashboardProvider _dashboardProvider;
+
   @override
   void initState() {
     super.initState();
     // Fetch accepted orders when the screen is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<OrderProvider>(context, listen: false).fetchAcceptedOrders();
+      _dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
+      //replace with userId
+      _dashboardProvider.fetchDashboardSummary(52);
     });
   }
 
@@ -37,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext context) {
           final orderProvider = Provider.of<OrderProvider>(context);
           return orderProvider.isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+              AppColors.primaryYellowColor)))
               : orderProvider.errorMessage != null
                   ? Center(child: Text(orderProvider.errorMessage!))
                   : orderProvider.acceptedOrders
@@ -286,12 +294,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 3,
                               ),
-                              // LargeBtn(
-                              //     btnText: "Delivered",
-                              //     btnColor: AppColors.lightGreen,
-                              //     onTap: (){},
-                              //     btnTextColor: Colors.white
-                              // )
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -555,14 +557,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: SizedBox(
-                  width: double.infinity,
-                  child: Image(
-                    image: AssetImage("assets/chart.png"),
-                    fit: BoxFit.cover,
-                  )),
+            Consumer<DashboardProvider>(
+              builder: (context, provider, _) {
+                if (provider.isLoading) {
+                  return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryYellowColor)
+                  )
+                  );
+                } else if (provider.error != null) {
+                  return Center(
+                    child: Text(
+                      provider.error!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                } else if (provider.summary != null) {
+                  final summary = provider.summary!;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      height: 220,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white),
+                      child: DashboardPieChart(
+                        totalCompleted: summary.totalCompleted,
+                        totalPending: summary.totalPending,
+                        totalOngoing: summary.totalOngoing,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                      child: Text('No data available')
+                  );
+                }
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(15),

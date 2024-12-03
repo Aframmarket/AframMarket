@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Driver-Ui/HiveModels/company.dart';
 import 'Screens/Driver-Ui/HiveModels/upload.dart';
 import 'Screens/Driver-Ui/HiveModels/user.dart';
+import 'Screens/Driver-Ui/provider/dashboard_provider.dart';
 import 'Screens/Driver-Ui/provider/driver_signup_provider.dart';
 import 'Screens/Driver-Ui/provider/signup_provider.dart';
 import 'Screens/Driver-Ui/provider/verification_provider.dart';
@@ -76,7 +77,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<WithdrawProvider>(
           create: (_) => WithdrawProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+            create: (_) => DashboardProvider()
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
